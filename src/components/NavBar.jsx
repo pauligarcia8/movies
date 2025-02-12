@@ -1,5 +1,5 @@
-import logo from "../../public/popcorn.png";
-import sun from "../../public/sun.png";
+import logo from "/public/popcorn.png";
+import sun from "/public/sun.png";
 
 const NavBar = () => {
   return (
