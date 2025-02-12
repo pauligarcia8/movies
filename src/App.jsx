@@ -1,12 +1,12 @@
 import Gallery from "./components/Gallery";
+import MoviesProvider from "./store/movies-context";
 
 function App() {
 
-
   return (
-    <div>
+    <MoviesProvider>
       <Gallery />
-    </div>
+    </MoviesProvider>
   );
 }
 
