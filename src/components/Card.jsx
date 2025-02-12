@@ -1,7 +1,19 @@
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
 import { useMovies } from "../store/movies-context";
 
 const Card = () => {
   const { movies, loading } = useMovies();
+  const [expandedMovies, setExpandedMovies] = useState({});
+
+  const toggleOverview = (id) => {
+    setExpandedMovies((prevState) => ({
+      ...prevState,
+      [id]: {
+        isExpanded: !prevState[id]?.isExpanded,
+      },
+    }));
+  };
 
   return (
     <>
@@ -12,14 +24,29 @@ const Card = () => {
         </div>
       )}
       {movies.map((movie) => (
-        <a href="" className="group" key={movie.original_title}>
+        <div key={movie.original_title} className="group">
           <img
             src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-            class="w-full h-auto rounded-lg bg-gray-200 object-cover group-hover:opacity-75"
+            class="w-full h-auto rounded-lg bg-gray-200 object-cover"
           />
-          <h3 class="mt-4 text-sm text-gray-700">{movie.original_title}</h3>
-          <p class="mt-1 text-lg font-medium text-gray-900">{movie.overview}</p>
-        </a>
+          <div className="mt-4 flex items-center justify-between">
+            <h3 class="text-md text-gray-700">{movie.original_title}</h3>
+            <button onClick={() => toggleOverview(movie.id)}>
+              <ChevronDownIcon
+                className={`w-8 h-8 text-red-700 cursor-pointer hover:text-red-900" transition-transfor duration-300 ${
+                  expandedMovies[movie.id]?.isExpanded
+                    ? "rotate-180"
+                    : "rotate-0"
+                }`}
+              />
+            </button>
+          </div>
+          <p class="mt-1 text-md font-medium text-gray-900">
+            {expandedMovies[movie.id]?.isExpanded
+              ? movie.overview
+              : `${movie.overview.slice(0, 100)}...`}
+          </p>
+        </div>
       ))}
     </>
   );
