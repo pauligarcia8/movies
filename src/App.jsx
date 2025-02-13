@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<Gallery category={"popular"} />} />
         <Route path="/top-rated" element={<Gallery category={"top_rated"} />} />
         <Route path="/upcoming" element={<Gallery category={"upcoming"} />} />
-        <Route path="/" element={<Gallery category={"favorites"} />} />
+        <Route path="/favorites" element={<Gallery category={"favorites"} />} />
         </Routes>
       </BrowserRouter>
     </MoviesProvider>

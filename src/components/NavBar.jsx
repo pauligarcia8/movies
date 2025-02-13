@@ -46,7 +46,7 @@ const NavBar = () => {
               Upcoming
             </NavLink>
             <NavLink
-              to="favorites"
+              to="/favorites"
               onClick={() => {
                 setCategories("favorites");
               }}
