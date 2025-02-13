@@ -17,7 +17,7 @@ export default function MoviesProvider({ children }) {
   const fetchMovies = async (selectedCategory) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/movie/${selectedCategory}?api_key=${API_KEY}&language=en-US&page=`
+        `${BASE_URL}/movie/${selectedCategory}?api_key=${API_KEY}&language=en-US&page=1`
       );
       const movies = await response.json();
       if (response.ok) {
