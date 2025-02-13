@@ -2,51 +2,47 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 export const MoviesContext = createContext({
   movies: [],
-  loading: true
+  loading: true,
+  setCategories: () => {},
 });
 
 export default function MoviesProvider({ children }) {
-  const [movies, setMovies] = useState([]);
+  const [movieList, setMoviesList] = useState([]);
+  const [category, setCategories] = useState("popular");
   const [loading, setLoading] = useState(true);
 
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYzJiYTMxODliMzMxZWM5M2JkNGY2ZDNjODA3NTY4NSIsIm5iZiI6MTY0MzU3OTYxOS4xNjk5OTk4LCJzdWIiOiI2MWY3MDhlMzU5ZThhOTAwOTI1MTZiZDgiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.pmgrCZ0zpZXEdZH48ibrAw7xg_R4xuvDvmXDnOAsoBA",
-    },
+  const API_KEY = "fc2ba3189b331ec93bd4f6d3c8075685";
+  const BASE_URL = "https://api.themoviedb.org/3";
+
+  const fetchMovies = async (selectedCategory) => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/movie/${selectedCategory}?api_key=${API_KEY}&language=en-US&page=`
+      );
+      const movies = await response.json();
+      if (response.ok) {
+        setMoviesList(movies.results);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("ERROR");
+    }
   };
 
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-        const fetchMovies = async () => {
-          try {
-            const response = await fetch(
-              "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-              options
-            );
-            const movies = await response.json();
-            if (response.ok) {
-              setMovies(movies.results);
-              setLoading(false);
-            }
-          } catch (error) {
-            console.log("ERROR");
-          }
-        };
-        fetchMovies();
-    }, 3000)
-  }, []);
+      fetchMovies(category);
+    }, 3000);
+  }, [category]);
 
   return (
-    <MoviesContext.Provider value={{ movies, loading }}>
+    <MoviesContext.Provider value={{ movieList, loading, setCategories }}>
       {children}
     </MoviesContext.Provider>
   );
 }
 
 export const useMovies = () => {
-    return useContext(MoviesContext);
-}
+  return useContext(MoviesContext);
+};
