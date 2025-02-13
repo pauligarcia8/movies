@@ -3,7 +3,9 @@ import { useMovies } from "../store/movies-context";
 import MovieList from "./MovieList";
 
 const Gallery = ({ category }) => {
-  const { movieList, loading, setCategories } = useMovies();
+  const { movieList, favorites, loading, setCategories } = useMovies();
+
+  const moviesToShow = category === "favorites" ? favorites : movieList;
 
   useEffect(() => {
     setCategories(category);
@@ -17,7 +19,7 @@ const Gallery = ({ category }) => {
           <p className="text-lg font-semibold">Loading...</p>
         </div>
       )}
-      {!loading && <MovieList movies={movieList} />}
+      {!loading && <MovieList movies={moviesToShow} />}
     </>
   );
 };
