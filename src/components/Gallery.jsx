@@ -1,13 +1,25 @@
-import Card from "./Card";
+import { useEffect } from "react";
+import { useMovies } from "../store/movies-context";
+import MovieList from "./MovieList";
 
-const Gallery = () => {
-    return (
-        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-            <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8">
-                <Card />
-            </div>
+const Gallery = ({ category }) => {
+  const { movieList, loading, setCategories } = useMovies();
+
+  useEffect(() => {
+    setCategories(category);
+  }, []);
+
+  return (
+    <>
+      {loading && (
+        <div className="place-self-center flex items-center justify-between">
+          <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent"></div>
+          <p className="text-lg font-semibold">Loading...</p>
         </div>
-    )
-}
+      )}
+      {!loading && <MovieList movies={movieList} />}
+    </>
+  );
+};
 
 export default Gallery;
