@@ -15,7 +15,6 @@ const MovieList = ({ movies }) => {
     }));
   };
 
-  console.log("Favorites", favorites);
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8">
@@ -29,7 +28,7 @@ const MovieList = ({ movies }) => {
               {favorites.some((fav) => fav.id === movie.id) ? "❤️" : "🤍"}
             </button>
             <div className="mt-4 flex items-center justify-between">
-              <h3 class="text-md text-gray-700">{movie.original_title}</h3>
+              <h3 className="text-md text-gray-700">{movie.original_title}</h3>
               <button onClick={() => toggleOverview(movie.id, true)}>
                 <ChevronDownIcon
                   className={`w-8 h-8 text-red-700 cursor-pointer hover:text-red-900" transition-transfor duration-300 ${
@@ -40,7 +39,7 @@ const MovieList = ({ movies }) => {
                 />
               </button>
             </div>
-            <p class="mt-1 text-md font-medium text-gray-900">
+            <p className="mt-1 text-md font-medium text-gray-900">
               {expandedMovies[movie.id]?.isExpanded
                 ? movie.overview
                 : `${movie.overview.slice(0, 100)}...`}
