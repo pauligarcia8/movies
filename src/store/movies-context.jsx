@@ -10,8 +10,9 @@ export const MoviesContext = createContext({
 
 export default function MoviesProvider({ children }) {
   const [movieList, setMoviesList] = useState([]);
-  const [category, setCategories] = useState("popular");
   const [favorites, setFavorites] = useState([]);
+  const [category, setCategories] = useState("popular");
+  const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const API_KEY = "fc2ba3189b331ec93bd4f6d3c8075685";
@@ -23,6 +24,7 @@ export default function MoviesProvider({ children }) {
   const fetchMovies = async (selectedCategory) => {
     try {
       setLoading(true);
+      setErrorMessage(null);
       let url;
 
       if (selectedCategory === "favorites") {
@@ -39,6 +41,11 @@ export default function MoviesProvider({ children }) {
       });
       const movies = await response.json();
 
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      
+      
       if (response.ok) {
         if (selectedCategory === "favorites") {
           setFavorites(movies.results || []);
@@ -47,7 +54,7 @@ export default function MoviesProvider({ children }) {
         }
       }
     } catch (error) {
-      console.error("ERROR", error);
+      setErrorMessage("There has been a problem with your fetch operation");
     } finally {
       setLoading(false);
     }
@@ -77,11 +84,10 @@ export default function MoviesProvider({ children }) {
       const data = await response.json();
 
       if (data.success) {
-        setFavorites(
-          (prevFavorites) =>
-            isFavorite
-              ? prevFavorites.filter((fav) => fav.id !== movie.id) 
-              : [...prevFavorites, movie] 
+        setFavorites((prevFavorites) =>
+          isFavorite
+            ? prevFavorites.filter((fav) => fav.id !== movie.id)
+            : [...prevFavorites, movie]
         );
       } else {
         throw new Error(data.status_message || "Error al actualizar favoritos");
@@ -95,12 +101,19 @@ export default function MoviesProvider({ children }) {
     setLoading(true);
     setTimeout(() => {
       fetchMovies(category);
-    }, 3000);
+    }, 1000);
   }, [category]);
 
   return (
     <MoviesContext.Provider
-      value={{ movieList, favorites, loading, setCategories, toggleFavorite }}
+      value={{
+        movieList,
+        favorites,
+        errorMessage,
+        loading,
+        setCategories,
+        toggleFavorite,
+      }}
     >
       {children}
     </MoviesContext.Provider>
