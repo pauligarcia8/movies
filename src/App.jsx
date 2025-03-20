@@ -6,7 +6,7 @@ import Gallery from "./components/Gallery";
 function App() {
   return (
     <MoviesProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/movies">
         <NavBar />
         <Routes>
           <Route path="/" element={<Gallery category={"popular"} />} />
